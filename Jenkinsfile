@@ -4,7 +4,22 @@ properties([
 
 node() {
 	cleanWs()
-	checkout scm
-	sh "make"
-	sh "./main"
+	agent none
+	stages {
+		stage('Checkout') {
+			steps {
+				checkout scm
+			}
+		}
+		stage('Build') {
+			steps {
+				sh "make"
+				sh "./main"
+			}
+		}
+		stage('Archivage') {
+			steps {
+				archiveArtifacts artifacts: 'build/**/*.zip
+			}
+		}
 }
